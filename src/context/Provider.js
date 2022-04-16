@@ -14,23 +14,30 @@ function Provider({ children }) {
   };
 
   function filteredData(filterByName) {
-    const inputNameFilter = data.filter(({ name }) => name.toLowerCase()
-      .includes(filterByName.toLowerCase()));
+    const inputNameFilter = data.filter(({ name }) =>
+      name.toLowerCase().includes(filterByName.toLowerCase())
+    );
     setSearch(inputNameFilter);
   }
 
   function filteredColumn(filterColumn, filterComparison, filterValue) {
-    const inputColumnFilter = data.filter(({ [filterColumn]: columnValue }) => {
-      if (filterComparison === "maior que") {
-        return Number(columnValue) > Number(filterValue);
-      }
-      if (filterComparison === "igual a") {
-        return Number(columnValue) === Number(filterValue);
-      }
-      if (filterComparison === "menor que") {
-        return Number(columnValue) < Number(filterValue);
-      }
-    });
+    const inputColumnFilter = search.filter(
+      ({ [filterColumn]: columnValue }) => {
+        if (filterComparison === "maior que") {
+          // console.log(Number(columnValue) > Number(filterValue));
+          return Number(columnValue) > Number(filterValue);
+        }
+        if (filterComparison === "igual a") {
+          // console.log(Number(columnValue) === Number(filterValue));
+          return Number(columnValue) === Number(filterValue);
+        }
+        if (filterComparison === "menor que") {
+          // console.log(Number(columnValue) < Number(filterValue));
+          return Number(columnValue) < Number(filterValue);
+        }
+        return false;
+      },
+    );
     setSearch(inputColumnFilter);
   }
 
@@ -40,7 +47,7 @@ function Provider({ children }) {
 
   return (
     <MyContext.Provider
-      value={ { data, setData, search, setSearch, filteredData, filteredColumn } }
+      value={{ data, setData, search, setSearch, filteredData, filteredColumn }}
     >
       {children}
     </MyContext.Provider>
