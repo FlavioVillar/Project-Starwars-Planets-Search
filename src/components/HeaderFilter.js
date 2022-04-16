@@ -18,10 +18,10 @@ function HeaderFilter() {
   
   const handleClick = (e) => {
     e.preventDefault();
-    filteredData(filterByName);
-    if (filterColumn === "") {
-      filteredData(filterByName);
-    }
+    // filteredData(filterByName);
+    // if (filterColumn === "") {
+    //   filteredData(filterByName);
+    // }
     if (filterColumn !== "" || filterComparison !== "") {
       filteredColumn(filterColumn, filterComparison, filterValue);
     }
