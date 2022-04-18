@@ -91,18 +91,20 @@ describe('1 - Faça uma requisição para o endpoint `/planets` da API de Star W
   });
 });
 
-describe('2 - Filtre a tabela através de um texto, inserido num *campo de texto*, exibindo somente os planetas cujos nomes incluam o texto digitado', () => {
+describe("2 - Filtre a tabela através de um texto, inserido num *campo de texto*, exibindo somente os planetas cujos nomes incluam o texto digitado", () => {
   beforeAll(mockFetch);
   beforeEach(cleanup);
 
   const ROWS_WITH_LETTER_O = 8;
   const ROWS_WITH_LETTERS_OO = 3;
 
-  it('Renderize o campo de texto para o filtro de nomes', async () => {
+  it("Renderize o campo de texto para o filtro de nomes", async () => {
     await act(async () => {
       render(<App />);
     });
-    expect(await screen.findByTestId(INPUT_FILTER_NAME_SELECTOR)).toBeInTheDocument();
+    expect(
+      await screen.findByTestId(INPUT_FILTER_NAME_SELECTOR)
+    ).toBeInTheDocument();
   });
 
   it('Filtre os planetas que possuem a letra "o" no nome', async () => {
@@ -111,9 +113,19 @@ describe('2 - Filtre a tabela através de um texto, inserido num *campo de texto
     });
 
     const input = await screen.findByTestId(INPUT_FILTER_NAME_SELECTOR);
-    fireEvent.change(input, { target: { value: 'o' } });
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(ROWS_WITH_LETTER_O);
-    const planetNames = ['Coruscant', 'Dagobah', 'Endor', 'Hoth', 'Kamino', 'Naboo', 'Tatooine'];
+    fireEvent.change(input, { target: { value: "o" } });
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      ROWS_WITH_LETTER_O
+    );
+    const planetNames = [
+      "Coruscant",
+      "Dagobah",
+      "Endor",
+      "Hoth",
+      "Kamino",
+      "Naboo",
+      "Tatooine",
+    ];
     for (const planetName of planetNames) {
       expect(await screen.findByText(planetName)).toBeInTheDocument();
     }
@@ -125,44 +137,71 @@ describe('2 - Filtre a tabela através de um texto, inserido num *campo de texto
     });
 
     const input = await screen.findByTestId(INPUT_FILTER_NAME_SELECTOR);
-    fireEvent.change(input, { target: { value: 'oo' } });
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(ROWS_WITH_LETTERS_OO);
-    const planetNames = ['Naboo', 'Tatooine'];
+    fireEvent.change(input, { target: { value: "oo" } });
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      ROWS_WITH_LETTERS_OO
+    );
+    const planetNames = ["Naboo", "Tatooine"];
     for (const planetName of planetNames) {
       expect(await screen.findByText(planetName)).toBeInTheDocument();
     }
   });
 
-  it('Faça vários filtros em sequência', async () => {
+  it("Faça vários filtros em sequência", async () => {
     await act(async () => {
       render(<App />);
     });
 
     const input = await screen.findByTestId(INPUT_FILTER_NAME_SELECTOR);
-    fireEvent.change(input, { target: { value: 'o' } });
+    fireEvent.change(input, { target: { value: "o" } });
     let planetNames = [];
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(ROWS_WITH_LETTER_O);
-    planetNames = ['Coruscant', 'Dagobah', 'Endor', 'Hoth', 'Kamino', 'Naboo', 'Tatooine'];
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      ROWS_WITH_LETTER_O
+    );
+    planetNames = [
+      "Coruscant",
+      "Dagobah",
+      "Endor",
+      "Hoth",
+      "Kamino",
+      "Naboo",
+      "Tatooine",
+    ];
     for (const planetName of planetNames) {
       expect(await screen.findByText(planetName)).toBeInTheDocument();
     }
 
     await act(async () => {
       const input = await screen.findByTestId(INPUT_FILTER_NAME_SELECTOR);
-      fireEvent.change(input, { target: { value: 'oo' } });
+      fireEvent.change(input, { target: { value: "oo" } });
     });
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(ROWS_WITH_LETTERS_OO);
-    planetNames = ['Naboo', 'Tatooine'];
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      ROWS_WITH_LETTERS_OO
+    );
+    planetNames = ["Naboo", "Tatooine"];
     for (const planetName of planetNames) {
       expect(await screen.findByText(planetName)).toBeInTheDocument();
     }
 
     await act(async () => {
       const input = await screen.findByTestId(INPUT_FILTER_NAME_SELECTOR);
-      fireEvent.change(input, { target: { value: '' } });
+      fireEvent.change(input, { target: { value: "" } });
     });
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(ROWS_TOTAL);
-    planetNames = ['Alderaan', 'Bespin', 'Coruscant', 'Dagobah', 'Endor', 'Hoth', 'Kamino', 'Naboo', 'Tatooine', 'Yavin IV'];
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      ROWS_TOTAL
+    );
+    planetNames = [
+      "Alderaan",
+      "Bespin",
+      "Coruscant",
+      "Dagobah",
+      "Endor",
+      "Hoth",
+      "Kamino",
+      "Naboo",
+      "Tatooine",
+      "Yavin IV",
+    ];
     for (const planetName of planetNames) {
       expect(await screen.findByText(planetName)).toBeInTheDocument();
     }
@@ -296,53 +335,97 @@ describe('3 - Crie um filtro para valores numéricos', () => {
   });
 });
 
-describe('4 - Implemente múltiplos filtros numéricos', () => {
-  it('Adicione dois filtros e verifique se a tabela foi atualizada com as informações filtradas', async () => {
+describe("4 - Implemente múltiplos filtros numéricos", () => {
+  it("Adicione dois filtros e verifique se a tabela foi atualizada com as informações filtradas", async () => {
     await act(async () => {
       render(<App />);
     });
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(ROWS_TOTAL);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      ROWS_TOTAL
+    );
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'diameter' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'maior que' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '8900' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "diameter" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "maior que" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "8900" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(NUMERIC_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      NUMERIC_FILTERED_ROWS
+    );
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'population' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'menor que' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '1000000' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "population" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "menor que" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "1000000" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(DOUBLE_NUMERIC_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      DOUBLE_NUMERIC_FILTERED_ROWS
+    );
   });
 
-  it('Adicione três filtros e verifique se a tabela foi atualizada com as informações filtradas', async () => {
+  it("Adicione três filtros e verifique se a tabela foi atualizada com as informações filtradas", async () => {
     await act(async () => {
       render(<App />);
     });
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(ROWS_TOTAL);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      ROWS_TOTAL
+    );
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'diameter' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'maior que' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '8900' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "diameter" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "maior que" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "8900" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(NUMERIC_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      NUMERIC_FILTERED_ROWS
+    );
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'population' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'menor que' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '1000000' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "population" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "menor que" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "1000000" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(DOUBLE_NUMERIC_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      DOUBLE_NUMERIC_FILTERED_ROWS
+    );
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'rotation_period' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'igual a' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '23' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "rotation_period" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "igual a" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "23" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(TRIPLE_NUMERIC_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      TRIPLE_NUMERIC_FILTERED_ROWS
+    );
   });
 });
 
-describe.only('5 - Não utilize filtros repetidos', () => {
+describe('5 - Não utilize filtros repetidos', () => {
   beforeAll(mockFetch);
   beforeEach(cleanup);
 
