@@ -13,13 +13,13 @@ function HeaderFilter() {
     'rotation_period',
     'surface_water',
   ]);
-  const [filterByNumericValues, setFilterByNumericValues] = useState([
-    {
-      column: '',
-      comparison: '',
-      value: '',
-    },
-  ]);
+  // const [filterByNumericValues, setFilterByNumericValues] = useState([
+  //   {
+  //     column: '',
+  //     comparison: '',
+  //     value: '',
+  //   },
+  // ]);
 
   const { filteredData, filteredColumn } = useContext(PlanetContext);
 
@@ -43,12 +43,12 @@ function HeaderFilter() {
     });
 
     const filteredNewColumn = () => {
-      console.log(columns);
+      // console.log(columns);
       const newColumns = columns.filter((column) => column !== filterColumn);
       setColumns(newColumns);
     };
     filteredNewColumn();
-    console.log(filterByNumericValues);
+    // console.log(filterByNumericValues);
   };
 
   return (
