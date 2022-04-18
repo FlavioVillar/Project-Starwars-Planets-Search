@@ -24,19 +24,16 @@ function Provider({ children }) {
     const inputColumnFilter = search.filter(
       ({ [filterColumn]: columnValue }) => {
         if (filterComparison === "maior que") {
-          // console.log(Number(columnValue) > Number(filterValue));
           return Number(columnValue) > Number(filterValue);
         }
         if (filterComparison === "igual a") {
-          // console.log(Number(columnValue) === Number(filterValue));
           return Number(columnValue) === Number(filterValue);
         }
         if (filterComparison === "menor que") {
-          // console.log(Number(columnValue) < Number(filterValue));
           return Number(columnValue) < Number(filterValue);
         }
         return false;
-      },
+      }
     );
     setSearch(inputColumnFilter);
   }
