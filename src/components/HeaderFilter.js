@@ -36,11 +36,12 @@ function HeaderFilter() {
     if (filterColumn !== '' || filterComparison !== '') {
       filteredColumn(filterColumn, filterComparison, filterValue);
     }
-    setFilterByNumericValues({
-      column: filterColumn,
-      comparison: filterComparison,
-      value: filterValue,
-    });
+
+    // setFilterByNumericValues({
+    //   column: filterColumn,
+    //   comparison: filterComparison,
+    //   value: filterValue,
+    // });
 
     const filteredNewColumn = () => {
       // console.log(columns);
