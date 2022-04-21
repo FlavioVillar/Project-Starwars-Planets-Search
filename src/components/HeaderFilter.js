@@ -1,11 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import PlanetContext from '../context/PlanetContext';
 
 function HeaderFilter() {
-  const [filterByName, setFilterByName] = useState('');
-  const [filterColumn, setFilterColumn] = useState('population');
-  const [filterComparison, setFilterComparison] = useState('maior que');
-  const [filterValue, setFilterValue] = useState(0);
   const [columns, setColumns] = useState([
     'population',
     'orbital_period',
@@ -13,43 +9,38 @@ function HeaderFilter() {
     'rotation_period',
     'surface_water',
   ]);
-  // const [filterByNumericValues, setFilterByNumericValues] = useState([
-  //   {
-  //     column: '',
-  //     comparison: '',
-  //     value: '',
-  //   },
-  // ]);
 
-  const { filteredData, filteredColumn } = useContext(PlanetContext);
+  // valores definidos no state inicial para passar no teste.
+  const [filterByNumericValues, setFilterByNumericValues] = useState({
+    column: 'population',
+    comparison: 'maior que',
+    value: 0,
+  });
 
-  useEffect(() => {
-    filteredData(filterByName);
-  }, [filterByName]);
+  const {
+    selectOptions,
+    setSelectOptions,
+    filterByName,
+    setFilterByName } = useContext(PlanetContext);
 
-  useEffect(() => {
-    filteredColumn(filterColumn, filterComparison, filterValue);
-  }, []);
+  // Ação que pega os valores das colunas, comparação e valor e armazena em selectOptions, que está no contexto, e usa na função useEffect de filtro.
+  // Para que o componente Table possa filtrar os dados.
+  // Essa função é executada quando o usuário seleciona uma opção.
+  const handleClickFilter = () => {
+    setColumns((prevState) => prevState
+      .filter((item) => item !== filterByNumericValues.column));
+    setSelectOptions((prevState) => [...prevState, filterByNumericValues]);
+  };
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    if (filterColumn !== '' || filterComparison !== '') {
-      filteredColumn(filterColumn, filterComparison, filterValue);
-    }
-
-    // setFilterByNumericValues({
-    //   column: filterColumn,
-    //   comparison: filterComparison,
-    //   value: filterValue,
-    // });
-
-    const filteredNewColumn = () => {
-      // console.log(columns);
-      const newColumns = columns.filter((column) => column !== filterColumn);
-      setColumns(newColumns);
-    };
-    filteredNewColumn();
-    // console.log(filterByNumericValues);
+  const handleClickRemoveAll = () => {
+    setSelectOptions([]);
+    setColumns([
+      'population',
+      'orbital_period',
+      'diameter',
+      'rotation_period',
+      'surface_water',
+    ]);
   };
 
   return (
@@ -59,6 +50,7 @@ function HeaderFilter() {
           type="text"
           value={ filterByName }
           data-testid="name-filter"
+          // pega valor para filtrar por nome do planeta e seta no state, que está no contexto.
           onChange={ (e) => setFilterByName(e.target.value) }
           placeholder="Search"
         />
@@ -66,26 +58,25 @@ function HeaderFilter() {
       <div>
         <select
           data-testid="column-filter"
-          value={ filterColumn }
+          value={ filterByNumericValues.column }
           name="column"
-          onChange={ (e) => setFilterColumn(e.target.value) }
+          onChange={ ({ target: { value } }) => setFilterByNumericValues(
+            (prevState) => ({ ...prevState, column: value }),
+          ) }
         >
-          {columns.map((column) => (
-            <option key={ column } value={ column }>
+          {columns.map((column, index) => (
+            <option key={ index } value={ column }>
               {column}
             </option>
           ))}
-          {/* <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option> */}
         </select>
 
         <select
           data-testid="comparison-filter"
-          value={ filterComparison }
-          onChange={ (e) => setFilterComparison(e.target.value) }
+          value={ filterByNumericValues.comparison }
+          onChange={ ({ target: { value } }) => setFilterByNumericValues(
+            (prevState) => ({ ...prevState, comparison: value }),
+          ) }
         >
           <option value="maior que">maior que</option>
           <option value="menor que">menor que</option>
@@ -94,24 +85,45 @@ function HeaderFilter() {
         <input
           type="number"
           data-testid="value-filter"
-          value={ filterValue }
-          onChange={ (e) => setFilterValue(e.target.value) }
+          value={ filterByNumericValues.value }
+          onChange={ ({ target: { value } }) => setFilterByNumericValues(
+            (prevState) => ({ ...prevState, value }),
+          ) }
         />
-        <button type="button" data-testid="button-filter" onClick={ handleClick }>
+        <button
+          type="button"
+          data-testid="button-filter"
+          onClick={ handleClickFilter }
+        >
           Filter
         </button>
       </div>
-      <div>
-        {/* {filterByNumericValues && (
-                    filterByNumericValues.map((filterByNumericValue) => (
-            <div key={filterByNumericValue.column}>
-              <p>{filterByNumericValue.column}</p>
-              <p>{filterByNumericValue.comparison}</p>
-              <p>{filterByNumericValue.value}</p>
-            </div>
-          ))
-        )} */}
-      </div>
+      {selectOptions.map((filter, index) => (
+        <div data-testid="filter" key={ index }>
+          <span>
+            {`${filter.column} ${filter.comparison} ${filter.value}`}
+          </span>
+          <button
+            id={ index }
+            type="button"
+            onClick={ () => {
+              setSelectOptions((prevState) => prevState
+                .filter((item) => item.column !== filter.column));
+              setColumns((prevState) => [...prevState, filter.column]);
+            } }
+            // função de onclick só funcionou direto no button, não em uma função para ser chamada.
+          >
+            X
+          </button>
+        </div>
+      ))}
+      <button
+        data-testid="button-remove-filters"
+        type="button"
+        onClick={ handleClickRemoveAll }
+      >
+        Remove all filters
+      </button>
     </div>
   );
 }

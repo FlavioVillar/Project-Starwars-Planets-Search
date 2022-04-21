@@ -6,45 +6,53 @@ import fetchPlanetAPI from '../services/FetchPlanetsAPI';
 function Provider({ children }) {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState([]);
+  const [filterByName, setFilterByName] = useState('');
+  const [selectOptions, setSelectOptions] = useState([]);
 
-  const getPlanets = async () => {
-    const { results } = await fetchPlanetAPI();
-    setData(results);
-    setSearch(results);
-  };
-
-  function filteredData(filterByName) {
-    const inputNameFilter = data.filter(({ name }) => name.toLowerCase()
-      .includes(filterByName.toLowerCase()));
-    setSearch(inputNameFilter);
-  }
-
-  function filteredColumn(filterColumn, filterComparison, filterValue) {
-    const inputColumnFilter = search.filter(
-      ({ [filterColumn]: columnValue }) => {
-        if (filterComparison === 'maior que') {
-          return Number(columnValue) > Number(filterValue);
-        }
-        if (filterComparison === 'igual a') {
-          return Number(columnValue) === Number(filterValue);
-        }
-        if (filterComparison === 'menor que') {
-          return Number(columnValue) < Number(filterValue);
-        }
-        return false;
-      },
-
-    );
-    setSearch(inputColumnFilter);
-  }
+  // função que chama API, useEffect é responsável por disparar a função quando o componente é renderizado novamente no navegador (componentDidMount).
+  useEffect(() => {
+    (async () => {
+      const { results } = await fetchPlanetAPI();
+      // coloca valores em data
+      setData(results);
+      // coloca valores em search (para que o componente Table possa apresentar os dados) e filtra por nome e por valor numérico (comparação e valor).
+      setSearch(results);
+    })();
+  }, []);
 
   useEffect(() => {
-    getPlanets();
-  }, []);
+    // função que filtra os dados por nome de planeta.
+    let inputNameFilter = data.filter(({ name }) => name
+      .toLowerCase().includes(filterByName.toLowerCase()));
+    // condição filtra com os valores das opções selecionadas pelo usuário.
+    if (search.length) {
+      inputNameFilter = inputNameFilter.filter((item) => selectOptions
+        .every(({ column, comparison, value }) => {
+          if (comparison === 'maior que') {
+            return Number(item[column]) > Number(value);
+          }
+          if (comparison === 'menor que') {
+            return Number(item[column]) < Number(value);
+          }
+          if (comparison === 'igual a') {
+            return Number(item[column]) === Number(value);
+          }
+          return false;
+        }));
+    }
+    // seta o valor filtrado em search.
+    setSearch(inputNameFilter);
+  }, [selectOptions, filterByName, data]);
 
   return (
     <MyContext.Provider
-      value={ { data, setData, search, setSearch, filteredData, filteredColumn } }
+      value={ {
+        search,
+        selectOptions,
+        setSelectOptions,
+        filterByName,
+        setFilterByName,
+      } }
     >
       {children}
     </MyContext.Provider>

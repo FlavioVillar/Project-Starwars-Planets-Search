@@ -35,7 +35,7 @@ const mockFetch = () => {
     }));
 };
 
-describe('1 - Faça uma requisição para o endpoint `/planets` da API de Star Wars e preencha uma tabela com os dados retornados, com exceção dos da coluna `residents`', () => {
+describe.only('1 - Faça uma requisição para o endpoint `/planets` da API de Star Wars e preencha uma tabela com os dados retornados, com exceção dos da coluna `residents`', () => {
   beforeAll(mockFetch);
   beforeEach(cleanup);
 
@@ -91,7 +91,7 @@ describe('1 - Faça uma requisição para o endpoint `/planets` da API de Star W
   });
 });
 
-describe("2 - Filtre a tabela através de um texto, inserido num *campo de texto*, exibindo somente os planetas cujos nomes incluam o texto digitado", () => {
+describe.only("2 - Filtre a tabela através de um texto, inserido num *campo de texto*, exibindo somente os planetas cujos nomes incluam o texto digitado", () => {
   beforeAll(mockFetch);
   beforeEach(cleanup);
 
@@ -208,59 +208,68 @@ describe("2 - Filtre a tabela através de um texto, inserido num *campo de texto
   });
 });
 
-describe('3 - Crie um filtro para valores numéricos', () => {
+describe.only("3 - Crie um filtro para valores numéricos", () => {
   beforeAll(mockFetch);
   beforeEach(cleanup);
 
-  it('Renderize o filtro de coluna', async () => {
+  it("Renderize o filtro de coluna", async () => {
     await act(async () => {
       render(<App />);
     });
 
     const column = await screen.findByTestId(COLUMN_FILTER_SELECTOR);
-    expect(column).toHaveProperty('nodeName', 'SELECT');
-    const columns = ['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water'];
+    expect(column).toHaveProperty("nodeName", "SELECT");
+    const columns = [
+      "population",
+      "orbital_period",
+      "diameter",
+      "rotation_period",
+      "surface_water",
+    ];
     const foundColumnFilter = Array.from(column.children).map((child) => {
-      expect(child).toHaveProperty('nodeName', 'OPTION');
+      expect(child).toHaveProperty("nodeName", "OPTION");
       return child.innerHTML;
     });
     expect(foundColumnFilter).toEqual(expect.arrayContaining(columns));
   });
 
-  it('Renderize o filtro de comparação', async () => {
+  it("Renderize o filtro de comparação", async () => {
     await act(async () => {
       render(<App />);
     });
 
     const column = await screen.findByTestId(COMPARISON_FILTER_SELECTOR);
-    expect(column).toHaveProperty('nodeName', 'SELECT');
-    const columns = ['maior que', 'igual a', 'menor que'];
+    expect(column).toHaveProperty("nodeName", "SELECT");
+    const columns = ["maior que", "igual a", "menor que"];
     const foundComparisonFilter = Array.from(column.children).map((child) => {
-      expect(child).toHaveProperty('nodeName', 'OPTION');
+      expect(child).toHaveProperty("nodeName", "OPTION");
       return child.innerHTML;
     });
     expect(foundComparisonFilter).toEqual(expect.arrayContaining(columns));
   });
 
-  it('Renderize o campo para o valor do filtro', async () => {
+  it("Renderize o campo para o valor do filtro", async () => {
     await act(async () => {
       render(<App />);
     });
 
     const value = await screen.findByTestId(VALUE_FILTER_SELECTOR);
-    expect(value).toHaveProperty('nodeName', 'INPUT');
-    expect(value).toHaveAttribute('type', 'number');
+    expect(value).toHaveProperty("nodeName", "INPUT");
+    expect(value).toHaveAttribute("type", "number");
   });
 
-  it('Renderize o botão para executar a filtragem', async () => {
+  it("Renderize o botão para executar a filtragem", async () => {
     await act(async () => {
       render(<App />);
     });
 
-    expect(await screen.findByTestId(BUTTON_FILTER_SELECTOR)).toHaveProperty('nodeName', 'BUTTON');
+    expect(await screen.findByTestId(BUTTON_FILTER_SELECTOR)).toHaveProperty(
+      "nodeName",
+      "BUTTON"
+    );
   });
 
-  it('Verifica valores iniciais de cada campo', async () => {
+  it("Verifica valores iniciais de cada campo", async () => {
     await act(async () => {
       render(<App />);
     });
@@ -269,15 +278,15 @@ describe('3 - Crie um filtro para valores numéricos', () => {
     const comparison = await screen.findByTestId(COMPARISON_FILTER_SELECTOR);
     const value = await screen.findByTestId(VALUE_FILTER_SELECTOR);
 
-    expect(column).toHaveValue('population');
-    expect(column.firstChild).toHaveTextContent('population');
+    expect(column).toHaveValue("population");
+    expect(column.firstChild).toHaveTextContent("population");
 
-    expect(comparison).toHaveValue('maior que');
-    expect(comparison.firstChild).toHaveTextContent('maior que');
+    expect(comparison).toHaveValue("maior que");
+    expect(comparison.firstChild).toHaveTextContent("maior que");
     expect(value).toHaveValue(0);
   });
 
-  it('Filtre utilizando apenas o botão de filtrar', async () => {
+  it("Filtre utilizando apenas o botão de filtrar", async () => {
     await act(async () => {
       render(<App />);
     });
@@ -286,7 +295,9 @@ describe('3 - Crie um filtro para valores numéricos', () => {
 
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
 
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(DEFAULT_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      DEFAULT_FILTERED_ROWS
+    );
   });
 
   it('Filtre utilizando a comparação "menor que"', async () => {
@@ -296,12 +307,20 @@ describe('3 - Crie um filtro para valores numéricos', () => {
 
     const LESS_FILTERED_ROWS = 7;
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'surface_water' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'menor que' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '40' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "surface_water" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "menor que" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "40" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
 
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(LESS_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      LESS_FILTERED_ROWS
+    );
   });
 
   it('Filtre utilizando a comparação "maior que"', async () => {
@@ -311,12 +330,20 @@ describe('3 - Crie um filtro para valores numéricos', () => {
 
     const GREATER_FILTERED_ROWS = 8;
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'diameter' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'maior que' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '8900' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "diameter" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "maior que" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "8900" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
 
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(GREATER_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      GREATER_FILTERED_ROWS
+    );
   });
 
   it('Filtre utilizando a comparação "igual a"', async () => {
@@ -326,16 +353,24 @@ describe('3 - Crie um filtro para valores numéricos', () => {
 
     const EQUALS_FILTERED_ROWS = 2;
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'population' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'igual a' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '200000' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "population" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "igual a" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "200000" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
 
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(EQUALS_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      EQUALS_FILTERED_ROWS
+    );
   });
 });
 
-describe("4 - Implemente múltiplos filtros numéricos", () => {
+describe.only("4 - Implemente múltiplos filtros numéricos", () => {
   it("Adicione dois filtros e verifique se a tabela foi atualizada com as informações filtradas", async () => {
     await act(async () => {
       render(<App />);
@@ -425,11 +460,11 @@ describe("4 - Implemente múltiplos filtros numéricos", () => {
   });
 });
 
-describe('5 - Não utilize filtros repetidos', () => {
+describe.only("5 - Não utilize filtros repetidos", () => {
   beforeAll(mockFetch);
   beforeEach(cleanup);
 
-  it('Filtre por população e o remove das opções', async () => {
+  it("Filtre por população e o remove das opções", async () => {
     await act(async () => {
       render(<App />);
     });
@@ -440,31 +475,54 @@ describe('5 - Não utilize filtros repetidos', () => {
     let foundColumnFilter = null;
 
     column = await screen.findByTestId(COLUMN_FILTER_SELECTOR);
-    expect(column).toHaveProperty('nodeName', 'SELECT');
+    expect(column).toHaveProperty("nodeName", "SELECT");
     foundColumnFilter = Array.from(column.children).map((child) => {
-      expect(child).toHaveProperty('nodeName', 'OPTION');
+      expect(child).toHaveProperty("nodeName", "OPTION");
       return child.innerHTML;
     });
-    expect(foundColumnFilter).toEqual(expect.arrayContaining(['population', 'orbital_period', 'diameter', 'rotation_period', 'surface_water']));
+    expect(foundColumnFilter).toEqual(
+      expect.arrayContaining([
+        "population",
+        "orbital_period",
+        "diameter",
+        "rotation_period",
+        "surface_water",
+      ])
+    );
 
-    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), { target: { value: 'population' } });
-    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), { target: { value: 'maior que' } });
-    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), { target: { value: '8000' } });
+    fireEvent.change(await screen.findByTestId(COLUMN_FILTER_SELECTOR), {
+      target: { value: "population" },
+    });
+    fireEvent.change(await screen.findByTestId(COMPARISON_FILTER_SELECTOR), {
+      target: { value: "maior que" },
+    });
+    fireEvent.change(await screen.findByTestId(VALUE_FILTER_SELECTOR), {
+      target: { value: "8000" },
+    });
     fireEvent.click(await screen.findByTestId(BUTTON_FILTER_SELECTOR));
-    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(NUMERIC_FILTERED_ROWS);
+    expect(await screen.findAllByRole(ROW_ROLE_SELECTOR)).toHaveLength(
+      NUMERIC_FILTERED_ROWS
+    );
 
     column = await screen.findByTestId(COLUMN_FILTER_SELECTOR);
-    expect(column).toHaveProperty('nodeName', 'SELECT');
+    expect(column).toHaveProperty("nodeName", "SELECT");
     foundColumnFilter = Array.from(column.children).map((child) => {
-      expect(child).toHaveProperty('nodeName', 'OPTION');
+      expect(child).toHaveProperty("nodeName", "OPTION");
       return child.innerHTML;
     });
-    expect(foundColumnFilter).toEqual(expect.arrayContaining(['orbital_period', 'diameter', 'rotation_period', 'surface_water']));
+    expect(foundColumnFilter).toEqual(
+      expect.arrayContaining([
+        "orbital_period",
+        "diameter",
+        "rotation_period",
+        "surface_water",
+      ])
+    );
     expect(foundColumnFilter).toHaveLength(OPTIONS_WITHOUT_REMOVED);
   });
 });
 
-describe('6 - Apague um filtro de valor numérico ao clicar no ícone de X de um dos filtros e apague todas filtragens numéricas simultaneamente ao clicar em outro botão de Remover todas filtragens', () => {
+describe.only('6 - Apague um filtro de valor numérico ao clicar no ícone de X de um dos filtros e apague todas filtragens numéricas simultaneamente ao clicar em outro botão de Remover todas filtragens', () => {
   beforeAll(mockFetch);
   beforeEach(cleanup);
 
