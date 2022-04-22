@@ -22,27 +22,29 @@ function Provider({ children }) {
 
   useEffect(() => {
     // função que filtra os dados por nome de planeta.
-    let inputNameFilter = data.filter(({ name }) => name
-      .toLowerCase().includes(filterByName.toLowerCase()));
+    let inputNameFilter = data.filter(({ name }) =>
+      name.toLowerCase().includes(filterByName.toLowerCase())
+    );
     // condição filtra com os valores das opções selecionadas pelo usuário.
     if (search.length) {
-      inputNameFilter = inputNameFilter.filter((item) => selectOptions
-        .every(({ column, comparison, value }) => {
-          if (comparison === 'maior que') {
+      inputNameFilter = inputNameFilter.filter((item) =>
+        selectOptions.every(({ column, comparison, value }) => {
+          if (comparison === "maior que") {
             return Number(item[column]) > Number(value);
           }
-          if (comparison === 'menor que') {
+          if (comparison === "menor que") {
             return Number(item[column]) < Number(value);
           }
-          if (comparison === 'igual a') {
+          if (comparison === "igual a") {
             return Number(item[column]) === Number(value);
           }
           return false;
-        }));
+        })
+      );
     }
     // seta o valor filtrado em search.
     setSearch(inputNameFilter);
-  }, [selectOptions, filterByName, data]);
+  }, [selectOptions, filterByName, data, search.length]);
 
   return (
     <MyContext.Provider
