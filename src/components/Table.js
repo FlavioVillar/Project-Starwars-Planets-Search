@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import MyContext from '../context/PlanetContext';
+import './Table.css';
 
 function Table() {
   const { search } = useContext(MyContext);
 
   return (
-    <table>
+    <table className="container-table">
       <thead>
         <tr>
           <th>Name</th>

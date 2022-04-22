@@ -1,0 +1,48 @@
+table {
+  background-color: rgba(0, 0, 0, 0.877);
+  border: 0.2rem solid white;
+  border-radius: 2rem;
+  border-spacing: 0 10px;
+  box-shadow: 
+    0 0 0.2rem white,
+    0 0 0.2rem white,
+    0 0 2rem rgb(247, 207, 29),
+    0 0 0.8rem rgb(247, 207, 29),
+    0 0 2.8rem rgb(247, 207, 29),
+    inset 0 0 1.3rem rgb(247, 207, 29);
+  color: rgb(247, 207, 29);
+  margin: 10px;
+  margin-top: 40px;
+  padding: 0.4em;
+  table-layout: fixed;
+  width: 98%;
+}
+
+table thead th {
+  background-color: rgb(247, 207, 29);
+  border-left: 2px white solid;
+  border-right: 2px white solid;
+  color: rgb(118, 118, 118);
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+
+  /* margin: 10px; */
+  text-shadow: 0 0 7px white , 0 0 10px white , 0 0 21px white;
+  text-transform: uppercase;
+}
+
+table tr {
+  background-color: rgba(118, 118, 118, 0.459);
+  font-size: 16px;
+  font-weight: 600;
+  height: 50px;
+  margin: 10px;
+  text-align: center;
+  text-shadow: 0 0 1px rgb(247, 207, 29) , 0 0 1px rgb(247, 207, 29) , 0 0 1px rgb(247, 207, 29);
+  text-transform: uppercase;
+}
+
+table td {
+  overflow: hidden;
+}
