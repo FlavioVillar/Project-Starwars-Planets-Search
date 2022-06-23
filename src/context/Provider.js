@@ -29,6 +29,7 @@ function Provider({ children }) {
     if (search.length) {
       inputNameFilter = inputNameFilter.filter((item) =>
         selectOptions.every(({ column, comparison, value }) => {
+          // every retorna os valores que satisfazem a condição (passa todo array e retorna quando tudo estiver true), se não retorna false.
           if (comparison === "maior que") {
             return Number(item[column]) > Number(value);
           }
